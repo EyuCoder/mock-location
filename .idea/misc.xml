@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/venom/StudioProjects/MockLocation/app/src/main/res/drawable/ic_close.xml" value="0.1015625" />
         <entry key="..\:/Users/venom/StudioProjects/MockLocation/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/venom/StudioProjects/MockLocation/app/src/main/res/layout/fragment_maps.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/venom/StudioProjects/MockLocation/app/src/main/res/menu/map_options.xml" value="0.19322916666666667" />

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.codexo.mocklocation">
 
     <!--
@@ -8,6 +9,10 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission
+        android:name="android.permission.ACCESS_MOCK_LOCATION"
+        tools:ignore="MockLocation,ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +24,7 @@
         <service
             android:name=".MockLocationService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

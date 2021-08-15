@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.btnStart.setOnClickListener {
+            startMockService()
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -143,6 +147,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         }
     }
+
+
+    private fun startMockService() {
+        val str = sharedPrefs.getLocation()
+
+        if (!str.isNullOrEmpty()) {
+            val (latitude, longitude) = str.split(", ").map { it.toDouble() }
+            val latLng = LatLng(latitude, longitude)
+            MockLocationService.startMock(applicationContext, latLng)
+        }
+    }
+
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
