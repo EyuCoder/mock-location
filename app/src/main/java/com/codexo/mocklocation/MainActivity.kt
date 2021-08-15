@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val latitude = 8.98302323978401
         val longitude = 38.79610169411086
-        val zoomLevel = 20f
+        val zoomLevel = 0f
 //        val overlaySize = 100f
 
         val home = LatLng(latitude, longitude)
