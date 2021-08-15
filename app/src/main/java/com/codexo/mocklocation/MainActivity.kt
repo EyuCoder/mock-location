@@ -21,6 +21,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMainBinding
+    private var mockedLocation: LatLng? = null
+    private val sharedPrefs: PrefsManager by lazy { PrefsManager(applicationContext) }
+
     private val TAG = MainActivity::class.java.simpleName
     private val REQUEST_LOCATION_PERMISSION = 1
 
@@ -54,19 +57,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val overlaySize = 100f
 
         val home = LatLng(latitude, longitude)
-        map.addMarker(MarkerOptions().position(home).title("Marker in Bole AirPort"))
+        map.addMarker(MarkerOptions().position(home).title("Current Location"))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(home, zoomLevel))
 //        val androidOverlay = GroundOverlayOptions()
 //            .image(BitmapDescriptorFactory.fromResource(R.drawable.android))
 //            .position(home, overlaySize)
 //        map.addGroundOverlay(androidOverlay)
 
+        getMockedLocation(map)
         setMapLongClick(map)
         setPoiClick(map)
         setMapStyle(map)
         enableMyLocation()
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -96,8 +99,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setMapLongClick(map: GoogleMap) {
+
         map.setOnMapLongClickListener { latLng ->
 
+            saveNewLocation(latLng)
             // A Snippet is Additional text that's displayed below the title.
             val snippet = String.format(
                 Locale.getDefault(),
@@ -106,12 +111,35 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 latLng.longitude
             )
 
+            map.clear()
             map.addMarker(
                 MarkerOptions()
                     .position(latLng)
                     .title(getString(R.string.dropped_pin))
                     .snippet(snippet)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+            )?.showInfoWindow()
+        }
+
+        getMockedLocation(map)
+    }
+
+    private fun saveNewLocation(latLng: LatLng) {
+        val str = "${latLng.latitude}, ${latLng.longitude}"
+        sharedPrefs.saveLocation(str)
+    }
+
+    private fun getMockedLocation(map: GoogleMap) {
+        val str = sharedPrefs.getLocation()
+
+        if (!str.isNullOrEmpty()) {
+            val (latitude, longitude) = str.split(", ").map { it.toDouble() }
+
+            val latLng = LatLng(latitude, longitude)
+            map.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title("Mocked Location")
             )
         }
     }
@@ -123,7 +151,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(poi.latLng)
                     .title(poi.name)
             )
-            poiMarker.showInfoWindow()
+            poiMarker?.showInfoWindow()
         }
     }
 
